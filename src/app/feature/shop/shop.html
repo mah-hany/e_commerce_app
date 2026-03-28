@@ -1,0 +1,112 @@
+<div class="hero-gradient py-18 px-6">
+
+  <div class="max-w-screen-2xl mx-auto">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-white/80 mb-6">
+      <ol class="flex items-center space-x-2">
+        <li>
+          <a routerLink="/home" class="hover:underline">Home</a>
+        </li>
+        <li>/</li>
+        <li class="text-white font-medium">All Products</li>
+      </ol>
+    </nav>
+
+    <!-- Header Content -->
+    <div class="flex items-center space-x-4">
+
+      <!-- Icon Box -->
+      <div class="w-16 h-16 flex items-center justify-center bg-white/20 rounded-xl backdrop-blur">
+        <!-- Flowbite icon (Heroicons) -->
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10" />
+        </svg>
+      </div>
+
+      <!-- Title + Subtitle -->
+      <div>
+        <h1 class="text-4xl font-bold text-white">All Products</h1>
+        <p class="text-white/80 mt-1 text-sm ">
+          Explore our complete product collection
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<section class="bg-white py-10 max-w-screen-2xl mx-auto">
+  <!-- title -->
+  <div class="flex items-center gap-3 my-8">
+    <h2 class="text-[14px] font-bold text-gray-800">Showing <span class="text-emerald-600">{{productList().length}}</span>
+      Products</h2>
+  </div>
+
+  <!-- products -->
+  <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+    @for (prod of productList(); track prod._id) {
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="relative">
+        <img class="w-full h-60 object-contain bg-white" alt="Woman Shawl" [src]="prod.imageCover" />
+
+        <div class="absolute top-3 right-3 flex flex-col space-y-2">
+
+          <!-- Wishlist -->
+          <button
+            class="bg-white cursor-pointer h-8 w-8 rounded-full flex items-center justify-center transition shadow-sm text-gray-600 hover:text-red-500">
+            <i class="far fa-heart"></i>
+          </button>
+
+          <!-- Compare -->
+          <button
+            class="bg-white cursor-pointer h-8 w-8 rounded-full flex items-center justify-center text-gray-600 hover:text-green-600 transition shadow-sm">
+            <i class="fas fa-arrows-rotate"></i>
+          </button>
+
+          <!-- View -->
+          <a href="#"
+            class="bg-white cursor-pointer h-8 w-8 rounded-full flex items-center justify-center text-gray-600 hover:text-green-600 transition shadow-sm">
+            <i class="far fa-eye"></i>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="p-4">
+        <div class="text-xs text-gray-500 mb-1">{{prod.category.name}}</div>
+
+        <h3 class="font-medium mb-1 cursor-pointer">
+          <a class="line-clamp-2">
+            {{prod.title}}
+          </a>
+        </h3>
+
+        <!-- Rating -->
+        <div class="flex items-center mb-2">
+          <div class="flex text-yellow-400 mr-2">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </div>
+          <span class="text-xs text-gray-500">{{prod.ratingsAverage}} ({{prod.ratingsQuantity}})</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-lg font-bold text-gray-800">{{prod.price | currency : 'EGP'}}</span>
+
+          <!-- Add -->
+          <button
+            class="h-10 w-10 rounded-full flex items-center justify-center transition bg-primary-600 text-white cursor-pointer bg-green-700">
+            <i class="fas fa-plus"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</section>

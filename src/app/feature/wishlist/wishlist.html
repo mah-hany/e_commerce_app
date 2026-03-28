@@ -1,0 +1,130 @@
+<section class="bg-gray-50 min-h-screen px-6 py-8">
+  <div class="max-w-screen-2xl mx-auto">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-400 mb-5 flex items-center gap-2">
+      <a routerLink="/home" class="hover:text-green-600 transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-gray-700 font-medium">Wishlist</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center shrink-0">
+        <i class="fa-solid fa-heart text-red-500"></i>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">My Wishlist</h1>
+        <p class="text-sm text-gray-400 mt-0.5">
+          {{ wishlistItems().length }} item{{ wishlistItems().length !== 1 ? 's' : '' }} saved
+        </p>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+      <div class="flex items-center justify-center py-20">
+        <i class="fa-solid fa-spinner fa-spin text-green-500 text-3xl"></i>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading() && wishlistItems().length === 0) {
+      <div class="flex flex-col items-center text-center py-20 max-w-sm mx-auto">
+        <div class="w-24 h-24 rounded-full bg-red-50 flex items-center justify-center mb-5">
+          <i class="fa-regular fa-heart text-red-300 text-4xl"></i>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800 mb-2">Your wishlist is empty</h2>
+        <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+          Save items you love by clicking the heart icon on any product.
+        </p>
+        <a routerLink="/products"
+           class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-colors">
+          <i class="fa-solid fa-bag-shopping text-xs"></i>
+          Start Shopping
+        </a>
+      </div>
+    }
+
+    <!-- Wishlist Table -->
+    @if (!isLoading() && wishlistItems().length > 0) {
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+
+        <!-- Table Header -->
+        <div class="grid grid-cols-12 px-6 py-4 bg-gray-50 border-b border-gray-100 text-xs font-medium text-gray-400 uppercase tracking-wider">
+          <div class="col-span-6">Product</div>
+          <div class="col-span-2 text-center">Price</div>
+          <div class="col-span-2 text-center">Status</div>
+          <div class="col-span-2 text-center">Actions</div>
+        </div>
+
+        <!-- Table Rows -->
+        <div class="divide-y divide-gray-50">
+          @for (item of wishlistItems(); track item._id) {
+            <div class="grid grid-cols-12 px-6 py-4 items-center hover:bg-gray-50 transition-colors">
+
+              <!-- Product Info -->
+              <div class="col-span-6 flex items-center gap-4">
+                <div class="w-16 h-16 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden shrink-0 flex items-center justify-center">
+                  <img
+                    [src]="item.imageCover"
+                    [alt]="item.title"
+                    class="w-full h-full object-cover"
+                    onerror="this.src='https://placehold.co/64x64/f0fdf4/22c55e?text=?'"
+                  />
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-800 text-sm">{{ item.title }}</p>
+                  <p class="text-xs text-gray-400 mt-0.5">{{ item.category?.name }}</p>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="col-span-2 text-center">
+                <span class="font-bold text-gray-800 text-sm">{{ item.price }} EGP</span>
+              </div>
+
+              <!-- Status -->
+              <div class="col-span-2 text-center">
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-green-600">
+                  <i class="fa-solid fa-circle text-[8px]"></i>
+                  In Stock
+                </span>
+              </div>
+
+              <!-- Actions -->
+              <div class="col-span-2 flex items-center justify-center gap-2">
+                <button
+                  (click)="addToCart(item._id)"
+                  [disabled]="addingToCart() === item._id"
+                  class="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white text-xs font-semibold rounded-xl transition-colors">
+                  @if (addingToCart() === item._id) {
+                    <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+                  } @else {
+                    <i class="fa-solid fa-cart-shopping text-xs"></i>
+                  }
+                  Add to Cart
+                </button>
+                <button
+                  (click)="removeFromWishlist(item._id)"
+                  class="w-9 h-9 border border-gray-200 rounded-xl flex items-center justify-center text-gray-400 hover:border-red-300 hover:text-red-500 hover:bg-red-50 transition-colors">
+                  <i class="fa-solid fa-trash text-xs"></i>
+                </button>
+              </div>
+
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <!-- Continue Shopping -->
+      <a routerLink="/home"
+         class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-green-600 transition-colors">
+        <i class="fa-solid fa-arrow-left text-xs"></i>
+        Continue Shopping
+      </a>
+    }
+
+  </div>
+</section>

@@ -1,0 +1,318 @@
+<!-- Top Info Bar -->
+<div class="bg-white text-gray-600 text-xs py-3 px-4 hidden md:block border-b border-gray-100">
+    <div class="max-w-screen-2xl mx-auto flex items-center justify-between">
+
+        <!-- Left: Shipping + New Arrivals -->
+        <div class="flex items-center gap-6">
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-truck-fast text-green-600"></i>
+                Free Shipping on Orders 500 EGP
+            </span>
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-gift text-green-600"></i>
+                New Arrivals Daily
+            </span>
+        </div>
+
+        <!-- Right: Phone + Email + Auth -->
+        <div class="flex items-center gap-6">
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-phone text-green-600"></i>
+                +1 (800) 123-4567
+            </span>
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-envelope text-green-600"></i>
+                support&#64;freshcart.com
+            </span>
+            <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
+                @if (isLoggedIn()) {
+                    <span class="flex items-center gap-1.5 text-gray-700 font-medium">
+                        <i class="fa-regular fa-user text-green-600"></i>
+                        {{ userName() }}
+                    </span>
+                    <span class="text-gray-300">|</span>
+                    <button (click)="logout()"
+                        class="hover:text-red-500 flex items-center gap-1.5 transition-colors">
+                        <i class="fa-solid fa-right-from-bracket text-red-400"></i>
+                        Sign Out
+                    </button>
+                } @else {
+                    <a routerLink="/login"
+                        class="hover:text-green-600 flex items-center gap-1.5 transition-colors">
+                        <i class="fa-regular fa-user text-green-600"></i>
+                        Sign In
+                    </a>
+                    <span class="text-gray-300">|</span>
+                    <a routerLink="/register"
+                        class="hover:text-green-600 flex items-center gap-1.5 transition-colors">
+                        <i class="fa-solid fa-user-plus text-green-600"></i>
+                        Sign Up
+                    </a>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Main Navbar -->
+<nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+    <div class="max-w-screen-2xl mx-auto px-4 py-3">
+        <div class="flex items-center justify-between gap-4">
+
+            <!-- Logo -->
+            <a routerLink="/home" class="flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-cart-shopping text-green-600 text-2xl"></i>
+                <span class="text-xl font-bold text-gray-800 tracking-tight">FreshCart</span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="flex-1 max-w-2xl hidden md:block">
+                <div class="relative flex items-center">
+                    <input type="text" [(ngModel)]="searchQuery"
+                        class="block w-full ps-4 pe-12 py-2.5 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all placeholder:text-gray-400"
+                        placeholder="Search for products, brands and more..." />
+                    <button
+                        class="absolute end-0 top-0 bottom-0 px-3.5 bg-green-600 hover:bg-green-700 text-white rounded-e-xl transition-colors flex items-center justify-center">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop Nav Links + Action Icons -->
+            <div class="hidden md:flex items-center gap-4">
+
+                <!-- Nav Links -->
+                <ul class="flex items-center gap-1 text-sm font-medium">
+                    <li>
+                        <a routerLink="/home"
+                            class="px-3 py-2 text-gray-700 hover:text-green-600 transition-colors">Home</a>
+                    </li>
+                    <li>
+                        <a routerLink="/shop"
+                            class="px-3 py-2 text-gray-700 hover:text-green-600 transition-colors">Shop</a>
+                    </li>
+
+                    <!-- Categories Dropdown -->
+                    <li class="relative">
+                        <button id="categoriesDropdownButton" data-dropdown-toggle="categoriesDropdown"
+                            class="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-green-600 transition-colors">
+                            Categories
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="categoriesDropdown"
+                            class="z-50 hidden bg-white border border-gray-100 rounded-xl shadow-lg w-52">
+                            <a routerLink="/category/allcategories"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors rounded-t-xl">
+                                <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> All Categories
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+                                <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Electronics
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+                                <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Women's Fashion
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+                                <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Men's Fashion
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors rounded-b-xl">
+                                <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Beauty &amp; Health
+                            </a>
+                        </div>
+                    </li>
+
+                    <!-- Brands -->
+                    <li>
+                        <a routerLink="/brands"
+                            class="px-3 py-2 text-gray-700 hover:text-green-600 transition-colors">Brands</a>
+                    </li>
+                </ul>
+
+                <!-- 24/7 Support -->
+                <div class="flex items-center gap-2 border-l border-gray-200 pl-4">
+                    <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-headset text-white text-sm"></i>
+                    </div>
+                    <div class="flex flex-col leading-tight text-xs">
+                        <span class="font-semibold text-gray-700">Support</span>
+                        <span class="text-gray-400">24/7 Help</span>
+                    </div>
+                </div>
+
+                <!-- Action Icons -->
+                <div class="flex items-center gap-1 border-l border-gray-200 pl-4">
+
+                    <!-- Wishlist -->
+                    <button routerLink="/wishlist"
+                        class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors">
+                        <i class="fa-regular fa-heart text-lg"></i>
+                        @if (cartCountService.wishlistCount() > 0) {
+                            <span
+                                class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                                {{ cartCountService.wishlistCount() }}
+                            </span>
+                        }
+                    </button>
+
+                    <!-- Cart -->
+                    <button routerLink="/cart"
+                        class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:text-green-600 transition-colors">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        @if (cartCountService.cartCount() > 0) {
+                            <span
+                                class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                                {{ cartCountService.cartCount() }}
+                            </span>
+                        }
+                    </button>
+
+                    <!-- Sign In / User Icon -->
+                    @if (isLoggedIn()) {
+                        <button (click)="logout()"
+                            class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors">
+                            <i class="fa-regular fa-user text-lg"></i>
+                        </button>
+                    } @else {
+                        <a routerLink="/login"
+                            class="flex items-center gap-2 ms-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl transition-colors">
+                            <i class="fa-regular fa-user text-sm"></i>
+                            Sign In
+                        </a>
+                    }
+
+                </div>
+            </div>
+
+            <!-- Mobile: Wishlist + Cart + Hamburger -->
+            <div class="flex md:hidden items-center gap-1">
+                <!-- Wishlist (mobile) -->
+                <button routerLink="/wishlist"
+                    class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-xl">
+                    <i class="fa-regular fa-heart text-lg"></i>
+                    @if (cartCountService.wishlistCount() > 0) {
+                        <span
+                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {{ cartCountService.wishlistCount() }}
+                        </span>
+                    }
+                </button>
+
+                <!-- Cart (mobile) -->
+                <button routerLink="/cart"
+                    class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-xl">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    @if (cartCountService.cartCount() > 0) {
+                        <span
+                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {{ cartCountService.cartCount() }}
+                        </span>
+                    }
+                </button>
+
+                <!-- Hamburger -->
+                <button data-collapse-toggle="mobileMenu"
+                    class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden mt-3 pb-2 border-t border-gray-100 pt-3 space-y-2">
+            <!-- Mobile Search -->
+            <div class="relative flex items-center">
+                <input type="text"
+                    class="block w-full ps-4 pe-12 py-2.5 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                    placeholder="Search for products..." />
+                <button
+                    class="absolute end-0 top-0 bottom-0 px-3.5 bg-green-600 text-white rounded-e-xl flex items-center justify-center">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Nav Links -->
+            <ul class="space-y-0.5 text-sm font-medium">
+                <li>
+                    <a routerLink="/home"
+                        class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-green-600 bg-green-50">
+                        <i class="fa-solid fa-house text-sm"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/shop"
+                        class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-50">
+                        <i class="fa-solid fa-store text-sm"></i> Shop
+                    </a>
+                </li>
+                <li>
+                    <button id="mobileCategoriesButton" data-collapse-toggle="mobileCategoriesMenu"
+                        aria-expanded="false"
+                        class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-50">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-sm"></i> Categories
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                    </button>
+                    <div id="mobileCategoriesMenu"
+                        class="hidden mt-0.5 ms-3 space-y-0.5 border-l-2 border-green-100 pl-3">
+                        <a href="#"
+                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                            <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> All Categories
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                            <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Electronics
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                            <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Women's Fashion
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                            <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Men's Fashion
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                            <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Beauty &amp; Health
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <a routerLink="/brands"
+                        class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-50">
+                        <i class="fa-solid fa-star text-sm"></i> Brands
+                    </a>
+                </li>
+                <!-- Mobile Auth -->
+                @if (isLoggedIn()) {
+                    <li>
+                        <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-gray-700 bg-gray-50">
+                            <i class="fa-regular fa-user text-green-600 text-sm"></i>
+                            <span class="font-medium">{{ userName() }}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <button (click)="logout()"
+                            class="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
+                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                            Sign Out
+                        </button>
+                    </li>
+                } @else {
+                    <li>
+                        <a routerLink="/login"
+                            class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-600 text-white hover:bg-green-700">
+                            <i class="fa-regular fa-user text-sm"></i> Sign In
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+    </div>
+</nav>

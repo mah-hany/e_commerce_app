@@ -1,0 +1,26 @@
+/* navbar.css */
+
+/* Smooth dropdown fade-in */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+nav li div[class*="absolute"] {
+  animation: fadeInDown 0.15s ease-out forwards;
+}
+
+/* Mobile menu slide-in */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+nav .border-t {
+  animation: slideDown 0.2s ease-out forwards;
+}
+
+#mobileMenu:not(.hidden) ~ * [data-collapse-toggle="mobileMenu"] i {
+    font-family: "Font Awesome 6 Free";
+    content: "\f00d"; /* fa-xmark */
+}

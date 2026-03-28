@@ -1,0 +1,356 @@
+<section class="bg-gray-50 min-h-screen py-6 px-4">
+  <div class="max-w-screen-2xl mx-auto">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 mb-5 flex items-center gap-1.5 flex-wrap">
+      <a routerLink="/home" class="hover:text-green-600 transition-colors">Home</a>
+      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      <a href="#" class="hover:text-green-600 transition-colors">{{ product()?.category?.name }}</a>
+      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      <a href="#" class="hover:text-green-600 transition-colors">{{ product()?.subcategory?.[0]?.name }}</a>
+      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      <span class="text-gray-600 font-medium">{{ product()?.title }}</span>
+    </nav>
+
+    @if (isLoading()) {
+      <div class="flex items-center justify-center py-32">
+        <i class="fa-solid fa-spinner fa-spin text-green-500 text-4xl"></i>
+      </div>
+    }
+
+    @if (product(); as p) {
+
+      <!-- Top Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+
+        <!-- LEFT: Images -->
+        <div class="space-y-3">
+
+          <!-- Main Image -->
+          <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden flex items-center justify-center h-80 sm:h-96">
+            <img
+              [src]="selectedImage()"
+              [alt]="p.title"
+              class="w-full h-full object-contain p-4"
+              onerror="this.src='https://placehold.co/400x400/f0fdf4/22c55e?text=?'"
+            />
+          </div>
+
+          <!-- Thumbnails -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1">
+            @for (img of p.images; track img) {
+              <button
+                (click)="selectImage(img)"
+                class="w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0 transition-all"
+                [ngClass]="selectedImage() === img ? 'border-green-500' : 'border-gray-100 hover:border-gray-300'">
+                <img [src]="img" [alt]="p.title" class="w-full h-full object-cover"/>
+              </button>
+            }
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Product Info -->
+        <div class="space-y-4">
+
+          <!-- Category Badges -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2.5 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full border border-green-100">
+              {{ p.category?.name }}
+            </span>
+            <span class="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+              {{ p.brand?.name }}
+            </span>
+          </div>
+
+          <!-- Title -->
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 leading-tight">{{ p.title }}</h1>
+
+          <!-- Stars + Reviews -->
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-0.5">
+              @for (star of getStars(p.ratingsAverage); track $index) {
+                <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+              }
+            </div>
+            <span class="text-sm text-gray-500">{{ p.ratingsAverage }} ({{ p.ratingsQuantity }} reviews)</span>
+          </div>
+
+          <!-- Price -->
+          <div class="flex items-baseline gap-2">
+            <span class="text-3xl font-bold text-gray-800">{{ p.price }} EGP</span>
+            @if (p.priceAfterDiscount) {
+              <span class="text-lg text-gray-400 line-through">{{ p.priceAfterDiscount }} EGP</span>
+            }
+          </div>
+
+          <!-- Stock -->
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-circle text-green-500 text-[8px]"></i>
+            <span class="text-sm text-green-600 font-medium">In Stock</span>
+          </div>
+
+          <!-- Description -->
+          <p class="text-sm text-gray-500 leading-relaxed">{{ p.description }}</p>
+
+          <!-- Quantity -->
+          <div>
+            <p class="text-sm font-medium text-gray-700 mb-2">Quantity</p>
+            <div class="flex items-center gap-4">
+              <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                <button (click)="decreaseQty()"
+                  class="w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors border-r border-gray-200">
+                  <i class="fa-solid fa-minus text-xs"></i>
+                </button>
+                <span class="w-10 text-center text-sm font-semibold text-gray-800">{{ quantity() }}</span>
+                <button (click)="increaseQty()"
+                  class="w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors border-l border-gray-200">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+              </div>
+              <span class="text-xs text-gray-400">{{ p.quantity }} available</span>
+            </div>
+          </div>
+
+          <!-- Total Price -->
+          <div class="flex items-center justify-between py-3 border-t border-b border-gray-100">
+            <span class="text-sm text-gray-500">Total Price:</span>
+            <span class="text-xl font-bold text-green-600">{{ (p.price * quantity()).toFixed(2) }} EGP</span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              (click)="addToCart(p._id)"
+              [disabled]="addingToCart()"
+              class="flex items-center justify-center gap-2 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white text-sm font-semibold rounded-xl transition-colors">
+              @if (addingToCart()) {
+                <i class="fa-solid fa-spinner fa-spin"></i>
+              } @else {
+                <i class="fa-solid fa-cart-shopping"></i>
+              }
+              Add to Cart
+            </button>
+            <button
+              class="flex items-center justify-center gap-2 py-3 bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold rounded-xl transition-colors">
+              <i class="fa-solid fa-bolt"></i>
+              Buy Now
+            </button>
+          </div>
+
+          <!-- Wishlist + Share -->
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              (click)="toggleWishlist(p._id)"
+              class="flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:border-red-300 hover:text-red-500 transition-colors">
+              <i class="fa-regular fa-heart"></i>
+              Add to Wishlist
+            </button>
+            <button
+              class="flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:border-gray-300 transition-colors">
+              <i class="fa-solid fa-share-nodes"></i>
+              Share
+            </button>
+          </div>
+
+          <!-- Delivery Badges -->
+          <div class="grid grid-cols-3 gap-3 pt-2">
+            <div class="flex flex-col items-center text-center gap-1 p-3 bg-gray-50 rounded-xl">
+              <i class="fa-solid fa-truck-fast text-green-500 text-lg"></i>
+              <p class="text-xs font-medium text-gray-700">Free Delivery</p>
+              <p class="text-[10px] text-gray-400">Orders over $50</p>
+            </div>
+            <div class="flex flex-col items-center text-center gap-1 p-3 bg-gray-50 rounded-xl">
+              <i class="fa-solid fa-rotate-left text-green-500 text-lg"></i>
+              <p class="text-xs font-medium text-gray-700">30 Days Return</p>
+              <p class="text-[10px] text-gray-400">Money back</p>
+            </div>
+            <div class="flex flex-col items-center text-center gap-1 p-3 bg-gray-50 rounded-xl">
+              <i class="fa-solid fa-shield-halved text-green-500 text-lg"></i>
+              <p class="text-xs font-medium text-gray-700">Secure Payment</p>
+              <p class="text-[10px] text-gray-400">100% Protected</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
+
+        <!-- Tab Headers -->
+        <div class="flex border-b border-gray-100">
+          <button
+            (click)="activeTab.set('details')"
+            class="flex items-center gap-2 px-5 py-4 text-sm font-medium transition-colors border-b-2"
+            [ngClass]="activeTab() === 'details'
+              ? 'border-green-500 text-green-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'">
+            <i class="fa-solid fa-circle-info text-xs"></i>
+            Product Details
+          </button>
+          <button
+            (click)="activeTab.set('reviews')"
+            class="flex items-center gap-2 px-5 py-4 text-sm font-medium transition-colors border-b-2"
+            [ngClass]="activeTab() === 'reviews'
+              ? 'border-green-500 text-green-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'">
+            <i class="fa-solid fa-star text-xs"></i>
+            Reviews ({{ p.ratingsQuantity }})
+          </button>
+          <button
+            (click)="activeTab.set('shipping')"
+            class="flex items-center gap-2 px-5 py-4 text-sm font-medium transition-colors border-b-2"
+            [ngClass]="activeTab() === 'shipping'
+              ? 'border-green-500 text-green-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'">
+            <i class="fa-solid fa-truck text-xs"></i>
+            Shipping & Returns
+          </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="p-6">
+
+          @if (activeTab() === 'details') {
+            <div class="space-y-5">
+              <div>
+                <h3 class="font-semibold text-gray-800 mb-2">About this Product</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">{{ p.description }}</p>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Product Information -->
+                <div>
+                  <h4 class="text-sm font-semibold text-gray-700 mb-3">Product Information</h4>
+                  <table class="w-full text-sm">
+                    <tbody class="divide-y divide-gray-50">
+                      <tr>
+                        <td class="py-2 text-gray-400 w-32">Category</td>
+                        <td class="py-2 text-gray-700 font-medium">{{ p.category?.name }}</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 text-gray-400">Subcategory</td>
+                        <td class="py-2 text-gray-700 font-medium">{{ p.subcategory?.[0]?.name }}</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 text-gray-400">Brand</td>
+                        <td class="py-2 text-gray-700 font-medium">{{ p.brand?.name }}</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 text-gray-400">Items Sold</td>
+                        <td class="py-2 text-gray-700 font-medium">+{{ p.sold }}305+ sold</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Key Features -->
+                <div>
+                  <h4 class="text-sm font-semibold text-gray-700 mb-3">Key Features</h4>
+                  <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center gap-2">
+                      <i class="fa-solid fa-check text-green-500 text-xs"></i>
+                      Premium Quality Product
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="fa-solid fa-check text-green-500 text-xs"></i>
+                      100% Authentic Guarantee
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="fa-solid fa-check text-green-500 text-xs"></i>
+                      Fast & Secure Packaging
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i class="fa-solid fa-check text-green-500 text-xs"></i>
+                      Quality Tested
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (activeTab() === 'reviews') {
+            <div class="text-center py-8 text-gray-400">
+              <i class="fa-solid fa-star text-4xl mb-3 block"></i>
+              <p class="text-sm">Reviews coming soon</p>
+            </div>
+          }
+
+          @if (activeTab() === 'shipping') {
+            <div class="space-y-4 text-sm text-gray-600">
+              <div class="flex items-start gap-3">
+                <i class="fa-solid fa-truck-fast text-green-500 mt-0.5"></i>
+                <div>
+                  <p class="font-medium text-gray-700">Free Delivery</p>
+                  <p class="text-gray-400">On orders over $50. Delivered in 3-5 business days.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fa-solid fa-rotate-left text-green-500 mt-0.5"></i>
+                <div>
+                  <p class="font-medium text-gray-700">30 Days Return</p>
+                  <p class="text-gray-400">Return within 30 days for a full refund. No questions asked.</p>
+                </div>
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+
+      <!-- You May Also Like -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+            <span class="w-1 h-6 bg-green-500 rounded-full inline-block"></span>
+            You May Also <span class="text-green-500 ms-1">Like</span>
+          </h2>
+          <div class="flex items-center gap-2">
+            <button class="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:border-green-500 hover:text-green-500 transition-colors">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <button class="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:border-green-500 hover:text-green-500 transition-colors">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          @for (related of relatedProducts(); track related._id) {
+            <div
+              (click)="goToProduct(related._id)"
+              class="group bg-white border border-gray-100 rounded-2xl overflow-hidden cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+              <div class="relative h-40 bg-gray-50 overflow-hidden">
+                <img [src]="related.imageCover" [alt]="related.title"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+                @if (related.priceAfterDiscount) {
+                  <span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+                    SALE
+                  </span>
+                }
+                <!-- Action Icons -->
+                <div class="absolute top-2 right-2 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button class="w-7 h-7 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors">
+                    <i class="fa-regular fa-heart text-xs"></i>
+                  </button>
+                  <button class="w-7 h-7 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-green-500 transition-colors">
+                    <i class="fa-solid fa-rotate text-xs"></i>
+                  </button>
+                  <button class="w-7 h-7 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-green-500 transition-colors">
+                    <i class="fa-regular fa-eye text-xs"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="p-3">
+                <p class="text-xs text-gray-800 font-medium truncate">{{ related.title }}</p>
+                <p class="text-sm font-bold text-green-600 mt-1">{{ related.price }} EGP</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+    }
+
+  </div>
+</section>
