@@ -20,6 +20,18 @@ export class AuthService {
     return this.httpClient.post(`${environment.baseUrl}/api/v1/auth/signup`, formdata);
   }
 
+  forgotPassword(data: { email: string }): Observable<any> {
+   return this.httpClient.post(`${environment.baseUrl}/api/v1/auth/forgotPasswords`, data);
+  }
+
+  verifyResetCode(data: { resetCode: string }): Observable<any> {
+   return this.httpClient.post(`${environment.baseUrl}/api/v1/auth/verifyResetCode`, data);
+  }
+
+  resetPassword(data: { email: string; newPassword: string }): Observable<any> {
+   return this.httpClient.put(`${environment.baseUrl}/api/v1/auth/resetPassword`, data);
+  }
+
   isLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId)) {
       return !!localStorage.getItem('token');
@@ -40,5 +52,6 @@ export class AuthService {
       localStorage.removeItem('userName');
     }
   }
+
 
 }

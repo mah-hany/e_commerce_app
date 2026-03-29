@@ -11,6 +11,8 @@ import { Allgategories } from './feature/gategories/allgategories/allgategories'
 import { SpecificGategory } from './feature/gategories/specific-gategory/specific-gategory';
 import { ProductDetails } from './feature/product-details/product-details';
 import { Wishlist } from './feature/wishlist/wishlist';
+import { Myaccount } from './feature/myaccount/myaccount';
+import { Fotgotpassword } from './core/auth/fotgotpassword/fotgotpassword';
 
 export const routes: Routes = [
     {path:'', redirectTo:'login', pathMatch:'full'},
@@ -19,9 +21,11 @@ export const routes: Routes = [
     {path:'home', component: Home},
     {path:'productdetails/:id', component: ProductDetails},
     {path: 'wishlist', component: Wishlist },
+    {path: 'forgotpassword', component: Fotgotpassword },
     {path:'shop', component: Shop},
     {path:'brands', component: Brands},
     {path:'cart', component: Cart},
+    {path: 'Myaccount', component: Myaccount},
     {path:'gategory', children:[
         {path:'allgategories', component: Allgategories},
         {path:'allgategories/:id', component: SpecificGategory}

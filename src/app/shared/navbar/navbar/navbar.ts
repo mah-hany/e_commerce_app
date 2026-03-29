@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal, WritableSignal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal, WritableSignal, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { initFlowbite } from 'flowbite/lib/esm/components';
@@ -24,8 +24,9 @@ export class Navbar implements OnInit {
 
   searchQuery: string = '';
 
-  isLoggedIn: WritableSignal<boolean> = signal(false);
-  userName:   WritableSignal<string>  = signal('');
+  isLoggedIn:   WritableSignal<boolean> = signal(false);
+  userName:     WritableSignal<string>  = signal('');
+  showUserMenu: WritableSignal<boolean> = signal(false);
 
   ngOnInit(): void {
     this.flowbiteService.loadFlowbite((flowbite) => { initFlowbite(); });
@@ -36,10 +37,24 @@ export class Navbar implements OnInit {
     }
   }
 
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('#userMenuWrapper')) {
+      this.showUserMenu.set(false);
+    }
+  }
+
+  toggleUserMenu(): void {
+    this.showUserMenu.update(v => !v);
+  }
+
   logout(): void {
     this.authService.logout();
     this.isLoggedIn.set(false);
     this.userName.set('');
+    this.showUserMenu.set(false);
     this.cartCountService.cartCount.set(0);
     this.cartCountService.wishlistCount.set(0);
     this.router.navigate(['/login']);

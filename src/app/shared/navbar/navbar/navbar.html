@@ -26,28 +26,25 @@
             </span>
             <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
                 @if (isLoggedIn()) {
-                    <span class="flex items-center gap-1.5 text-gray-700 font-medium">
-                        <i class="fa-regular fa-user text-green-600"></i>
-                        {{ userName() }}
-                    </span>
-                    <span class="text-gray-300">|</span>
-                    <button (click)="logout()"
-                        class="hover:text-red-500 flex items-center gap-1.5 transition-colors">
-                        <i class="fa-solid fa-right-from-bracket text-red-400"></i>
-                        Sign Out
-                    </button>
+                <span class="flex items-center gap-1.5 text-gray-700 font-medium">
+                    <i class="fa-regular fa-user text-green-600"></i>
+                    {{ userName() }}
+                </span>
+                <span class="text-gray-300">|</span>
+                <button (click)="logout()" class="hover:text-red-500 flex items-center gap-1.5 transition-colors">
+                    <i class="fa-solid fa-right-from-bracket text-red-400"></i>
+                    Sign Out
+                </button>
                 } @else {
-                    <a routerLink="/login"
-                        class="hover:text-green-600 flex items-center gap-1.5 transition-colors">
-                        <i class="fa-regular fa-user text-green-600"></i>
-                        Sign In
-                    </a>
-                    <span class="text-gray-300">|</span>
-                    <a routerLink="/register"
-                        class="hover:text-green-600 flex items-center gap-1.5 transition-colors">
-                        <i class="fa-solid fa-user-plus text-green-600"></i>
-                        Sign Up
-                    </a>
+                <a routerLink="/login" class="hover:text-green-600 flex items-center gap-1.5 transition-colors">
+                    <i class="fa-regular fa-user text-green-600"></i>
+                    Sign In
+                </a>
+                <span class="text-gray-300">|</span>
+                <a routerLink="/register" class="hover:text-green-600 flex items-center gap-1.5 transition-colors">
+                    <i class="fa-solid fa-user-plus text-green-600"></i>
+                    Sign Up
+                </a>
                 }
             </div>
         </div>
@@ -151,10 +148,10 @@
                         class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors">
                         <i class="fa-regular fa-heart text-lg"></i>
                         @if (cartCountService.wishlistCount() > 0) {
-                            <span
-                                class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                                {{ cartCountService.wishlistCount() }}
-                            </span>
+                        <span
+                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {{ cartCountService.wishlistCount() }}
+                        </span>
                         }
                     </button>
 
@@ -163,25 +160,95 @@
                         class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:text-green-600 transition-colors">
                         <i class="fa-solid fa-cart-shopping text-lg"></i>
                         @if (cartCountService.cartCount() > 0) {
-                            <span
-                                class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                                {{ cartCountService.cartCount() }}
-                            </span>
+                        <span
+                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                            {{ cartCountService.cartCount() }}
+                        </span>
                         }
                     </button>
 
-                    <!-- Sign In / User Icon -->
+                    <!-- User Dropdown / Sign In -->
                     @if (isLoggedIn()) {
-                        <button (click)="logout()"
-                            class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors">
-                            <i class="fa-regular fa-user text-lg"></i>
+                    <div class="relative" id="userMenuWrapper">
+                        <button (click)="toggleUserMenu()"
+                            class="w-9 h-9 flex items-center justify-center border-2 rounded-full transition-colors ms-1"
+                            [class]="showUserMenu() ? 'border-green-500 text-green-600' : 'border-gray-200 text-gray-500 hover:border-green-500 hover:text-green-600'">
+                            <i class="fa-regular fa-user text-base"></i>
                         </button>
+
+                        <!-- Dropdown Panel -->
+                        @if (showUserMenu()) {
+                        <div
+                            class="absolute end-0 top-full mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+
+                            <!-- User Header -->
+                            <div class="flex items-center gap-3 px-4 py-4 border-b border-gray-50">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+                                    <i class="fa-regular fa-user text-green-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 text-sm">{{ userName() }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Menu Items -->
+                            <ul class="p-2 space-y-0.5">
+                                <li>
+                                    <a routerLink="/Myaccount" (click)="showUserMenu.set(false)"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                                        <i class="fa-regular fa-user w-4 text-center text-gray-400"></i>
+                                        My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a routerLink="/orders" (click)="showUserMenu.set(false)"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                                        <i class="fa-solid fa-box w-4 text-center text-gray-400"></i>
+                                        My Orders
+                                    </a>
+                                </li>
+                                <li>
+                                    <a routerLink="/wishlist" (click)="showUserMenu.set(false)"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                                        <i class="fa-regular fa-heart w-4 text-center text-gray-400"></i>
+                                        My Wishlist
+                                    </a>
+                                </li>
+                                <li>
+                                    <a routerLink="/Myaccount" (click)="showUserMenu.set(false)"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                                        <i class="fa-regular fa-address-card w-4 text-center text-gray-400"></i>
+                                        Addresses
+                                    </a>
+                                </li>
+                                <li>
+                                    <a routerLink="/Myaccount" (click)="showUserMenu.set(false)"
+                                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                                        <i class="fa-solid fa-gear w-4 text-center text-gray-400"></i>
+                                        Settings
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- Sign Out -->
+                            <div class="p-2 border-t border-gray-50">
+                                <button (click)="logout()"
+                                    class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+                                    Sign Out
+                                </button>
+                            </div>
+
+                        </div>
+                        }
+                    </div>
                     } @else {
-                        <a routerLink="/login"
-                            class="flex items-center gap-2 ms-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl transition-colors">
-                            <i class="fa-regular fa-user text-sm"></i>
-                            Sign In
-                        </a>
+                    <a routerLink="/login"
+                        class="flex items-center gap-2 ms-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl transition-colors">
+                        <i class="fa-regular fa-user text-sm"></i>
+                        Sign In
+                    </a>
                     }
 
                 </div>
@@ -194,10 +261,10 @@
                     class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-xl">
                     <i class="fa-regular fa-heart text-lg"></i>
                     @if (cartCountService.wishlistCount() > 0) {
-                        <span
-                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                            {{ cartCountService.wishlistCount() }}
-                        </span>
+                    <span
+                        class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                        {{ cartCountService.wishlistCount() }}
+                    </span>
                     }
                 </button>
 
@@ -206,10 +273,10 @@
                     class="relative w-9 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-xl">
                     <i class="fa-solid fa-cart-shopping text-lg"></i>
                     @if (cartCountService.cartCount() > 0) {
-                        <span
-                            class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                            {{ cartCountService.cartCount() }}
-                        </span>
+                    <span
+                        class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                        {{ cartCountService.cartCount() }}
+                    </span>
                     }
                 </button>
 
@@ -260,24 +327,19 @@
                     </button>
                     <div id="mobileCategoriesMenu"
                         class="hidden mt-0.5 ms-3 space-y-0.5 border-l-2 border-green-100 pl-3">
-                        <a href="#"
-                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                        <a href="#" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
                             <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> All Categories
                         </a>
-                        <a href="#"
-                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                        <a href="#" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
                             <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Electronics
                         </a>
-                        <a href="#"
-                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                        <a href="#" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
                             <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Women's Fashion
                         </a>
-                        <a href="#"
-                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                        <a href="#" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
                             <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Men's Fashion
                         </a>
-                        <a href="#"
-                            class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
+                        <a href="#" class="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-green-600">
                             <i class="fa-solid fa-circle-dot text-[8px] text-green-400"></i> Beauty &amp; Health
                         </a>
                     </div>
@@ -288,28 +350,43 @@
                         <i class="fa-solid fa-star text-sm"></i> Brands
                     </a>
                 </li>
+
                 <!-- Mobile Auth -->
                 @if (isLoggedIn()) {
-                    <li>
-                        <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-gray-700 bg-gray-50">
-                            <i class="fa-regular fa-user text-green-600 text-sm"></i>
-                            <span class="font-medium">{{ userName() }}</span>
+                <li>
+                    <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-green-50">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                            <i class="fa-regular fa-user text-green-600 text-xs"></i>
                         </div>
-                    </li>
-                    <li>
-                        <button (click)="logout()"
-                            class="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
-                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                            Sign Out
-                        </button>
-                    </li>
+                        <span class="font-medium text-gray-800 text-sm">{{ userName() }}</span>
+                    </div>
+                </li>
+                <li>
+                    <a routerLink="/orders"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-50">
+                        <i class="fa-solid fa-box text-gray-400 text-sm"></i> My Orders
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/wishlist"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-gray-50">
+                        <i class="fa-regular fa-heart text-gray-400 text-sm"></i> My Wishlist
+                    </a>
+                </li>
+                <li>
+                    <button (click)="logout()"
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
+                        <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                        Sign Out
+                    </button>
+                </li>
                 } @else {
-                    <li>
-                        <a routerLink="/login"
-                            class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-600 text-white hover:bg-green-700">
-                            <i class="fa-regular fa-user text-sm"></i> Sign In
-                        </a>
-                    </li>
+                <li>
+                    <a routerLink="/login"
+                        class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-green-600 text-white hover:bg-green-700">
+                        <i class="fa-regular fa-user text-sm"></i> Sign In
+                    </a>
+                </li>
                 }
             </ul>
         </div>

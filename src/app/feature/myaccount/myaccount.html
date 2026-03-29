@@ -1,0 +1,283 @@
+
+<div class="hero-gradient py-18 px-6">
+
+  <div class="max-w-screen-2xl mx-auto">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-white/80 mb-6">
+      <ol class="flex items-center space-x-2">
+        <li>
+          <a routerLink="/home" class="hover:underline">Home</a>
+        </li>
+        <li>/</li>
+        <li class="text-white font-medium">My Account</li>
+      </ol>
+    </nav>
+
+    <!-- Header Content -->
+    <div class="flex items-center space-x-4">
+
+      <!-- Icon Box -->
+      <div class="w-16 h-16 flex items-center justify-center bg-white/20 rounded-xl backdrop-blur">
+        <!-- Flowbite icon (Heroicons) -->
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10" />
+        </svg>
+      </div>
+
+      <!-- Title + Subtitle -->
+      <div>
+        <h1 class="text-4xl font-bold text-white">My Account</h1>
+        <p class="text-white/80 mt-1 text-sm ">
+          Manage your addresses and account settings
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<section class="bg-gray-50 min-h-screen px-4 py-8">
+  <div class="max-w-screen-2xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+      <!-- LEFT: Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p class="text-sm font-semibold text-gray-500 px-2 mb-3">My Account</p>
+          <ul class="space-y-1">
+            <li>
+              <a routerLink="/addresses"
+                class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+                <span class="flex items-center gap-3">
+                  <i class="fa-solid fa-location-dot text-gray-400 w-4 text-center"></i>
+                  My Addresses
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/settings"
+                class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm bg-green-50 text-green-700 font-medium transition-colors">
+                <span class="flex items-center gap-3">
+                  <div class="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-gear text-white text-xs"></i>
+                  </div>
+                  Settings
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-green-400"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RIGHT: Main Content -->
+      <div class="lg:col-span-3 space-y-5">
+
+        <!-- Page Header -->
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Account Settings</h1>
+          <p class="text-sm text-gray-400 mt-1">Update your profile information and change your password</p>
+        </div>
+
+        <!-- Profile Information Card -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+
+          <!-- Card Header -->
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+              <i class="fa-regular fa-user text-green-600 text-lg"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-800">Profile Information</p>
+              <p class="text-xs text-gray-400">Update your personal details</p>
+            </div>
+          </div>
+
+          <!-- Profile Form -->
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-4">
+
+            <!-- Full Name -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+              <input
+                type="text"
+                formControlName="name"
+                class="block w-full px-4 py-3 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all placeholder:text-gray-300"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+                class="block w-full px-4 py-3 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all placeholder:text-gray-300"
+              />
+            </div>
+
+            <!-- Phone -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+              <input
+                type="tel"
+                formControlName="phone"
+                placeholder="01xxxxxxxxx"
+                class="block w-full px-4 py-3 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all placeholder:text-gray-300"
+              />
+            </div>
+
+            <!-- Success / Error -->
+            @if (profileSuccess()) {
+              <div class="flex items-center gap-2 p-3 bg-green-50 border border-green-100 rounded-xl text-xs text-green-600">
+                <i class="fa-solid fa-circle-check text-green-500"></i>
+                Profile updated successfully!
+              </div>
+            }
+            @if (profileError()) {
+              <div class="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded-xl text-xs text-red-600">
+                <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+                {{ profileError() }}
+              </div>
+            }
+
+            <!-- Save Button -->
+            <button
+              type="submit"
+              [disabled]="profileLoading()"
+              class="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white text-sm font-semibold rounded-xl transition-colors">
+              @if (profileLoading()) {
+                <i class="fa-solid fa-spinner fa-spin text-sm"></i>
+              } @else {
+                <i class="fa-solid fa-floppy-disk text-sm"></i>
+              }
+              Save Changes
+            </button>
+
+          </form>
+
+          <!-- Account Info -->
+          <div class="border-t border-gray-50 pt-5 space-y-3">
+            <p class="font-semibold text-gray-800 text-sm">Account Information</p>
+            <div class="flex items-center justify-between text-sm py-2 border-b border-gray-50">
+              <span class="text-gray-500">User ID</span>
+              <span class="text-gray-400 text-xs">—</span>
+            </div>
+            <div class="flex items-center justify-between text-sm py-2">
+              <span class="text-gray-500">Role</span>
+              <span class="px-2.5 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full border border-green-100">
+                User
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Change Password Card -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+
+          <!-- Card Header -->
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-lock text-orange-500 text-lg"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-800">Change Password</p>
+              <p class="text-xs text-gray-400">Update your account password</p>
+            </div>
+          </div>
+
+          <!-- Password Form -->
+          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-4">
+
+            <!-- Current Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Current Password</label>
+              <div class="relative">
+                <input
+                  [type]="showCurrentPass() ? 'text' : 'password'"
+                  formControlName="currentPassword"
+                  placeholder="Enter your current password"
+                  class="block w-full px-4 pe-10 py-3 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition-all placeholder:text-gray-300"
+                />
+                <button type="button" (click)="showCurrentPass.update(v => !v)"
+                  class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600">
+                  <i class="fa-regular text-sm" [ngClass]="showCurrentPass() ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- New Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
+              <div class="relative">
+                <input
+                  [type]="showNewPass() ? 'text' : 'password'"
+                  formControlName="newPassword"
+                  placeholder="Enter your new password"
+                  class="block w-full px-4 pe-10 py-3 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition-all placeholder:text-gray-300"
+                />
+                <button type="button" (click)="showNewPass.update(v => !v)"
+                  class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600">
+                  <i class="fa-regular text-sm" [ngClass]="showNewPass() ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </button>
+              </div>
+              <p class="text-xs text-gray-400 mt-1">Must be at least 6 characters</p>
+            </div>
+
+            <!-- Confirm New Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirm New Password</label>
+              <div class="relative">
+                <input
+                  [type]="showConfirmPass() ? 'text' : 'password'"
+                  formControlName="confirmPassword"
+                  placeholder="Confirm your new password"
+                  class="block w-full px-4 pe-10 py-3 bg-white border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition-all placeholder:text-gray-300"
+                />
+                <button type="button" (click)="showConfirmPass.update(v => !v)"
+                  class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600">
+                  <i class="fa-regular text-sm" [ngClass]="showConfirmPass() ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Success / Error -->
+            @if (passwordSuccess()) {
+              <div class="flex items-center gap-2 p-3 bg-green-50 border border-green-100 rounded-xl text-xs text-green-600">
+                <i class="fa-solid fa-circle-check text-green-500"></i>
+                Password changed successfully!
+              </div>
+            }
+            @if (passwordError()) {
+              <div class="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded-xl text-xs text-red-600">
+                <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+                {{ passwordError() }}
+              </div>
+            }
+
+            <!-- Change Password Button -->
+            <button
+              type="submit"
+              [disabled]="passwordLoading()"
+              class="flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-sm font-semibold rounded-xl transition-colors">
+              @if (passwordLoading()) {
+                <i class="fa-solid fa-spinner fa-spin text-sm"></i>
+              } @else {
+                <i class="fa-solid fa-lock text-sm"></i>
+              }
+              Change Password
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
