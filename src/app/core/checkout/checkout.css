@@ -1,0 +1,7 @@
+[type=datetime-local], [type=month], [type=search], [type=text], [type=tel], [type=time], [type=week], [multiple], textarea, select:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    --tw-ring-color: transparent;
+    border-color:transparent ;
+
+}

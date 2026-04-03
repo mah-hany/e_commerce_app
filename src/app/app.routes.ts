@@ -13,6 +13,7 @@ import { ProductDetails } from './feature/product-details/product-details';
 import { Wishlist } from './feature/wishlist/wishlist';
 import { Myaccount } from './feature/myaccount/myaccount';
 import { Fotgotpassword } from './core/auth/fotgotpassword/fotgotpassword';
+import { Checkout } from './core/checkout/checkout';
 
 export const routes: Routes = [
     {path:'', redirectTo:'login', pathMatch:'full'},
@@ -26,6 +27,7 @@ export const routes: Routes = [
     {path:'brands', component: Brands},
     {path:'cart', component: Cart},
     {path: 'Myaccount', component: Myaccount},
+    {path:'checkout', component: Checkout},
     {path:'gategory', children:[
         {path:'allgategories', component: Allgategories},
         {path:'allgategories/:id', component: SpecificGategory}
