@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth_service/auth-service';
 
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 @Component({
   selector: 'app-fotgotpassword',
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
@@ -16,6 +19,8 @@ export class Fotgotpassword  {
   private fb= inject(FormBuilder);
   private authService = inject(AuthService);
   private router= inject(Router);
+
+  private platformId = inject(PLATFORM_ID);
 
 
   currentStep: WritableSignal<number>  = signal(1);
@@ -97,7 +102,10 @@ export class Fotgotpassword  {
     next: () => {
       this.isLoading.set(false);
       this.successMsg.set('Password reset successfully! Redirecting to login...');
-      setTimeout(() => this.router.navigate(['/login']), 2000);
+      if (isPlatformBrowser(this.platformId)) {
+       setTimeout(() => this.router.navigate(['/login']), 2000);
+     }
+      // setTimeout(() => this.router.navigate(['/login']), 2000);
     },
     error: (err) => {
       this.isLoading.set(false);
